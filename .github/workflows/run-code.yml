@@ -1,0 +1,28 @@
+name: Exécuter mon code
+on: [push, workflow_dispatch]
+jobs:
+run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Exécuter code
+      run: echo "Hello World ! Votre code s'exécute ici"   
+ GNU nano 8.3                                                   .github/workflows/run-code.yml *                                                          
+name: Exécuter mon code
+on: [push, workflow_dispatch]
+jobs:
+run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Exécuter code
+      run: echo "Hello World ! Votre code s'exécute ici"    
+
+
+
+
+
+
+
+
+
