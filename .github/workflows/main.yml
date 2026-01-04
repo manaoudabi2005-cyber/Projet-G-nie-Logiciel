@@ -1,14 +1,14 @@
 name: Exécuter mon code
-on: [push, workflow_dispatch]  # Push ou manuel
+on: [push, workflow_dispatch]  
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4  # Récupère votre code
+    - uses: actions/checkout@v4  
     
     - name: Exécuter Python
       run: |
-        python mon_script.py     # Remplacez par votre code
+        python app.py     
       
     - name: Compiler C++
       run: gcc main.c -o main && ./main
