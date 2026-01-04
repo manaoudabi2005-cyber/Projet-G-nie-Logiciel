@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOKOLO EXPRESS</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            font-family: Arial, sans-serif; 
+        }
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+        }
+        .screen { 
+            display: none; 
+            min-height: 100vh;
+            padding: 20px; 
+            color: white; 
+            position: relative; 
+        }
+        .screen.active {
+            display: block; 
+        }
+        header {
+           text-align: center; 
+           margin-bottom: 30px; 
+        }
+        h1 {
+           font-size: 28px;
+           margin-bottom: 10px; 
+       }
+        .tagline { 
+            font-size: 16px; 
+            opacity: 0.9; 
+        }
+        .destinations { 
+            display: flex; 
+            gap: 20px; 
+            justify-content: center; 
+            margin: 40px 0; 
+        }
+        .dest {
+            background: rgba(255,255,255,0.2); 
+            padding: 20px; 
+            border-radius: 15px;
+            text-align: center; 
+            min-width: 120px; 
+        }
+        .btn {
+            background: #FFD700;
+            color: #333; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            margin: 10px 0; 
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.3); 
+            color: white; 
+        }
+        .form-group {
+            margin: 20px 0; 
+        }
+        label {
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+        }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+        }
+        .payment-options { 
+            display: flex; 
+            gap: 15px; 
+            margin: 20px 0; 
+        }
+        .payment-option { 
+            flex: 1; 
+            background: rgba(255,255,255,0.2); 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+            cursor: pointer; 
+        }
+        .payment-option.selected { 
+            background: #FFD700; 
+            color: #333; 
+        }
+        .nav-btn { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 20px; 
+            right: 20px; 
+        }
+        .back-btn { 
+            position: absolute; 
+            top: 20px; left: 20px; 
+            background: rgba(255,255,255,0.3); 
+            border: none; 
+            color: white; 
+            padding: 10px; 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            cursor: pointer; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px; 
+            overflow: hidden; 
+        }
+        th, td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+        }
+        th { 
+            background: rgba(255,255,255,0.2); 
+        }
+        .reservation-list { 
+            max-height: 400px; 
+            overflow-y: auto; 
+        }
+    </style>
+</head>
+<body>
+    <!-- Écran 1: Accueil -->
+    <div id="accueil" class="screen active">
+        <header>
+            <h1>MOKOLO EXPRESS</h1>
+            <p class="tagline">Agence de voyage - Maroua</p>
+            <p>Votre partenaire de confiance pour vos déplacements</p>
+        </header>
+        <div class="destinations">
+            <div class="dest">
+                <h3>Mokolo</h3>
+                <p>1300 XAF</p>
+            </div>
+            <div class="dest">
+                <h3>Garoua</h3>
+                <p>3500 XAF</p>
+            </div>
+        </div>
+        <button class="btn" onclick="goTo('reservation')">Acceder aux réservations</button>
+        <button class="btn btn-secondary" onclick="goTo('mes-reservations')">Voir mes réservations</button>
+    </div>
+
+    <!-- Écran 2: Liste réservations -->
+    <div id="mes-reservations" class="screen">
+        <button class="back-btn" onclick="goTo('accueil')">←</button>
+        <header><h1>Mes Réservations</h1></header>
+        <div id="reservation-list" class="reservation-list">
+            <!-- Rempli par JS -->
+        </div>
+        <button class="btn nav-btn" onclick="goTo('accueil')">Accueil</button>
+    </div>
+
+    <!-- Écran 3: Formulaire -->
+    <div id="reservation" class="screen">
+        <button class="back-btn" onclick="goTo('accueil')">←</button>
+        <header><h1>Formulaire de Réservation</h1></header>
+        <form id="reservation-form">
+            <div class="form-group">
+                <label>Nom</label>
+                <input type="text" id="nom" required>
+            </div>
+            <div class="form-group">
+                <label>Prénom</label>
+                <input type="text" id="prenom" required>
+            </div>
+            <div class="form-group">
+                <label>Date de Départ</label>
+                <input type="date" id="date-depart" required>
+            </div>
+            <div class="form-group">
+                <label>Heure de Départ</label>
+                <input type="time" id="heure-depart" required>
+            </div>
+            <div class="form-group">
+                <label>Destination</label>
+                <select id="destination" required>
+                    <option value="">Choisir</option>
+                    <option value="Mokolo">Mokolo (1300 XAF)</option>
+                    <option value="Garoua">Garoua (3500 XAF)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nombre de Places</label>
+                <select id="nb-places" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Accéder au paiement</button>
+            <button type="button" class="btn btn-secondary" onclick="goTo('accueil')">Annuler</button>
+        </form>
+    </div>
+
+    <!-- Écran 4: Paiement -->
+    <div id="paiement" class="screen">
+        <button class="back-btn" onclick="goTo('reservation')">←</button>
+        <header><h1>Page de paiement</h1></header>
+        <p>Veuillez choisir le mode de paiement</p>
+        <div class="payment-options">
+            <div class="payment-option" onclick="selectPayment('mtn')">
+                <strong>MTN Mobile Money</strong>
+            </div>
+            <div class="payment-option" onclick="selectPayment('orange')">
+                <strong>Orange Money</strong>
+            </div>
+        </div>
+        <div id="payment-details" style="margin: 20px 0;">
+            <div class="form-group">
+                <label>Numéro Téléphone</label>
+                <input type="tel" id="telephone" placeholder="6XXXXXXX" required>
+            </div>
+        </div>
+        <p>Un code de confirmation sera envoyé au numéro</p>
+        <button id="valider-paiement" class="btn nav-btn" onclick="processPayment()" disabled>Valider</button>
+    </div>
+
+    <!-- Écran 5: Vérification -->
+    <div id="verification" class="screen">
+        <button class="back-btn" onclick="goTo('paiement')">←</button>
+        <header><h1>Vérification</h1></header>
+        <p>Informations enregistrées dans la base de données</p>
+        <table id="verification-table">
+            <!-- Rempli par JS -->
+        </table>
+        <p style="margin-top: 20px; font-size: 14px;">
+            NB: Veuillez vous présenter 15 minutes avant le départ avec une pièce d'identité.
+        </p>
+        <button class="btn nav-btn" onclick="goTo('mes-reservations')">Mes Réservations</button>
+    </div>
+
+    <script>
+        let currentReservation = {};
+        let reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+        let selectedPayment = '';
+
+        function goTo(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'mes-reservations') updateReservationList();
+        }
+
+        document.getElementById('reservation-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentReservation = {
+                nom: document.getElementById('nom').value,
+                prenom: document.getElementById('prenom').value,
+                dateDepart: document.getElementById('date-depart').value,
+                heureDepart: document.getElementById('heure-depart').value,
+                destination: document.getElementById('destination').value,
+                nbPlaces: document.getElementById('nb-places').value,
+                timestamp: new Date().toISOString()
+            };
+            const destPrice = currentReservation.destination === 'Mokolo' ? 1300 : 3500;
+            currentReservation.montant = destPrice * parseInt(currentReservation.nbPlaces);
+            goTo('paiement');
+        });
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('valider-paiement').disabled = false;
+        }
+
+        function processPayment() {
+            currentReservation.montantPaye = currentReservation.montant;
+            currentReservation.heurePaiement = new Date().toLocaleString();
+            currentReservation.methodePaiement = selectedPayment === 'mtn' ? 'MTN Mobile Money' : 'Orange Money';
+            currentReservation.numeroReservation = 'RES' + Date.now();
+            reservations.unshift(currentReservation);
+            localStorage.setItem('reservations', JSON.stringify(reservations));
+            updateVerificationTable();
+            goTo('verification');
+        }
+
+        function updateVerificationTable() {
+            const table = document.getElementById('verification-table');
+            table.innerHTML = `
+                <tr><th>Heure Départ</th><td>${currentReservation.heureDepart}</td></tr>
+                <tr><th>Nom</th><td>${currentReservation.nom}</td></tr>
+                <tr><th>Prénom</th><td>${currentReservation.prenom}</td></tr>
+                <tr><th>Date Départ</th><td>${currentReservation.dateDepart}</td></tr>
+                <tr><th>Destination</th><td>${currentReservation.destination}</td></tr>
+                <tr><th>Nombre places</th><td>${currentReservation.nbPlaces}</td></tr>
+                <tr><th>Montant payé</th><td>${currentReservation.montantPaye} XAF</td></tr>
+                <tr><th>Heure paiement</th><td>${currentReservation.heurePaiement}</td></tr>
+                <tr><th>Méthode paiement</th><td>${currentReservation.methodePaiement}</td></tr>
+                <tr><th>Date Réservation</th><td>${currentReservation.timestamp.split('T')[0]}</td></tr>
+            `;
+        }
+
+        function updateReservationList() {
+            const list = document.getElementById('reservation-list');
+            if (reservations.length === 0) {
+                list.innerHTML = '<p style="text-align:center; padding:40px;">Aucune réservation</p>';
+                return;
+            }
+            list.innerHTML = reservations.map(r => `
+                <div style="background:rgba(255,255,255,0.1); padding:15px; margin:10px 0; border-radius:10px;">
+                    <p><strong>Nom et Prénom:</strong> ${r.nom} ${r.prenom}</p>
+                    <p><strong>N° Réservation:</strong> ${r.numeroReservation}</p>
+                    <p><strong>Départ:</strong> ${r.destination} - ${r.heureDepart}</p>
+                    <p><strong>Places / Montant:</strong> ${r.nbPlaces} / ${r.montantPaye} XAF</p>
+                    <p><strong>Réservé le:</strong> ${r.timestamp.split('T')[0]}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
