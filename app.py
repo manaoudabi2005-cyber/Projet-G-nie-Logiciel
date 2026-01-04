@@ -115,7 +115,7 @@ def confirmer_paiement():
     return jsonify({"status": "success", "numeroresa": numeroresa})
 
 @app.route('/db')
-def voir_db():
+def DB_liste_des_réservations():
     conn = sqlite3.connect(DBNAME)
     c = conn.cursor()
     c.execute('SELECT * FROM reservations ORDER BY timestamp DESC')
